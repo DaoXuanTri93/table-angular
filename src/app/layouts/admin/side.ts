@@ -128,9 +128,9 @@ export class LayoutAdminSide implements OnDestroy, OnInit {
       queryparams: { roleCode: 'SUPER-ADMIN' },
     },
     {
-      key: LINK.Setting,
+      key: LINK.Code,
       icon: EIcon.Cog,
-      label: 'Setting',
+      label: 'CodeDemo',
       children: [
         {
           key: LINK.Code,

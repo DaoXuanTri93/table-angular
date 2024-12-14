@@ -154,7 +154,7 @@ export const LINK = {
   Setting: '/setting',
   Content: '/setting/content',
   Post: '/setting/post',
-  Code: '/setting/code',
+  Code: '/codeDemo',
   Parameter: '/setting/parameter',
 };
 export const C_API = {

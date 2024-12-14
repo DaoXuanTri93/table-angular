@@ -1,24 +1,25 @@
+import { EIcon } from '@/enums';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output, type OnInit } from '@angular/core';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
-
+import { CSvgIcon } from '../svg-icon';
 interface TableColumn {
   title: string;
   key?: string; // Key to map data
   rowspan?: number;
   colspan?: number;
   children?: TableColumn[]; // For nested headers
-  filterable?: boolean;
-  filters?: { text: string; value: string }[];
-  filterFn?: (list: string[], item: any) => boolean;
-  sortable?: boolean;
-  sortFn?: (a: any, b: any) => number;
+  clickable?: boolean;
+  icon?: EIcon;
+  fixLeft?: boolean;
+  leftPosition?: string;
 }
 
 @Component({
   selector: 'app-reusable-table',
   standalone: true,
-  imports: [NzTableModule, NgFor, NgIf, NgClass],
+  imports: [NzTableModule, NgFor, NgIf, NgClass, NzIconModule, CSvgIcon],
   template: `
     <nz-table
       #reusableTable
@@ -27,9 +28,7 @@ interface TableColumn {
       [nzSize]="'middle'"
       [nzPaginationPosition]="'bottom'"
       [nzShowPagination]="true"
-      [nzPageSizeOptions]="[10, 20, 30]"
       [nzScroll]="{ x: scrollX, y: scrollY }"
-      [nzNoResult]="'noDataMessage'"
     >
       <!-- Dynamic Table Header -->
       <thead>
@@ -40,6 +39,7 @@ interface TableColumn {
                 'parent-header': !col.children,
                 'child-header': col.children,
               }"
+              [nzLeft]="col.fixLeft ? col.leftPosition || '0px' : false"
               [nzAlign]="'center'"
               [style.background-color]="col.children ? childHeaderBackground : parentHeaderBackground"
               [attr.rowspan]="col.rowspan || 1"
@@ -53,9 +53,24 @@ interface TableColumn {
 
       <!-- Dynamic Table Body -->
       <tbody>
+        <tr *ngIf="reusableTable.data.length === 0">
+          <td colspan="50"></td>
+        </tr>
         <tr *ngFor="let data of reusableTable.data">
           <ng-container *ngFor="let col of flattenedColumns">
-            <td [nzEllipsis]="true" class="text-body" *ngIf="col.key">{{ data[col.key] }}</td>
+            <td
+              [nzEllipsis]="true"
+              class="text-body"
+              *ngIf="col.key"
+              [nzLeft]="col.fixLeft ? col.leftPosition || '0px' : false"
+              [class.clickable]="col.clickable"
+              (click)="col.clickable ? onCellClick(data, col.key) : null"
+            >
+              <span class="flex justify-center"
+                >{{ data[col.key] }}
+                <svg *ngIf="col.icon" CSvgIcon [name]="col.icon" [size]="20"></svg>
+              </span>
+            </td>
           </ng-container>
         </tr>
       </tbody>
@@ -83,10 +98,21 @@ interface TableColumn {
       .text-body {
         text-align: center;
       }
+      .text-body.clickable {
+        cursor: pointer;
+        background-color: #e6f7ff; /* Highlight clickable cells */
+      }
+      .cell-icon {
+        margin-left: 8px;
+        color: #1890ff; /* Icon color */
+        vertical-align: middle;
+        cursor: pointer;
+      }
     `,
   ],
 })
 export class ReusableTableComponent implements OnInit {
+  EIcon = EIcon;
   @Input() tableData: any[] = []; // Data for the table
   @Input() tableColumns: TableColumn[] = []; // Configurable column definitions
   @Input() scrollX: string = '300px'; // Horizontal scroll size
@@ -95,13 +121,16 @@ export class ReusableTableComponent implements OnInit {
   @Input() parentHeaderBackground: string = '#4caf50';
   @Input() childHeaderBackground: string = '#f0f2f5';
   @Output() onEdit = new EventEmitter<Event>();
+  @Output() onCellClickEvent = new EventEmitter<{ data: any; key: string }>(); // Emit cell click event
   headerRows: TableColumn[][] = []; // Processed header rows for rendering
   flattenedColumns: TableColumn[] = []; // Flattened columns for the table body
 
   ngOnInit(): void {
     this.processColumns();
   }
-
+  onCellClick(data: any, key: string): void {
+    this.onCellClickEvent.emit({ data, key });
+  }
   /**
    * Process column configurations to support nested headers.
    */

@@ -5,7 +5,7 @@ import { BreadcrumbsComponent } from '@/components/breadcrumbs/breadcrumbs.compo
 import { CButton } from '@/components/button';
 import { CForm } from '@/components/form';
 import { ReusableTableComponent } from '@/components/table/table';
-import { EButtonSize, EFormType } from '@/enums';
+import { EButtonSize, EFormType, EIcon } from '@/enums';
 import { SGlobal } from '@/services/global';
 import { TFunction } from '@/utils/angular';
 import { CommonModule } from '@angular/common';
@@ -61,15 +61,17 @@ import type { Observable } from 'rxjs';
           </ng-template>
         </form>
       </div>
-      <table>
+      <div>
         <app-reusable-table
           [tableData]="listOfData"
           [tableColumns]="columnss"
           [parentHeaderBackground]="'#006241'"
           [childHeaderBackground]="'#cce0d9'"
           [scrollX]="'7000px'"
+          [scrollY]="'300px'"
+          (onCellClickEvent)="handleCellClick($event)"
         ></app-reusable-table>
-      </table>
+      </div>
     </div>
   `,
   providers: [{ provide: TranslateService, useClass: TFunction }, SGlobal],
@@ -82,15 +84,17 @@ export class PageDashboard implements OnInit {
     @Inject(TranslateService) readonly t: TFunction,
     @Inject(SGlobal) readonly sGlobal: SGlobal,
   ) {
-    this.listOfData = Array.from({ length: 100 }, (_, i) => ({
-      edit: `Edit ${i}`,
-      project: `${i == 2 ? 1 : 2}`,
-      workContent: `Content ${i}`,
-      mainHours: Math.floor(Math.random() * 100),
-      value: Math.random().toFixed(2),
-      action1: `Action ${i}-1`,
-      action2: `Action ${i}-2`,
-    }));
+    console.log('1');
+
+    // this.listOfData = Array.from({ length: 100 }, (_, i) => ({
+    //   edit: ``,
+    //   project: `${i == 2 ? 1 : 2}`,
+    //   workContent: `Content ${i}`,
+    //   mainHours: Math.floor(Math.random() * 100),
+    //   value: Math.random().toFixed(2),
+    //   action1: `Action ${i}-1`,
+    //   action2: `Action ${i}-2`,
+    // }));
   }
   columns = computed(() => [
     {
@@ -134,6 +138,10 @@ export class PageDashboard implements OnInit {
     },
   ]);
 
+  handleCellClick(event: { data: any; key: string }): void {
+    console.log('Cell clicked:', event);
+  }
+
   handleSubmit = ({ value }) => {
     this.data$ = this.sGlobal.data;
     this.sGlobal.data.subscribe(item => (this.dataProject = item.data));
@@ -146,7 +154,16 @@ export class PageDashboard implements OnInit {
   };
 
   ngOnInit(): void {
-    this.sGlobal.getAll(); // Dispatch the action to fetch data
+    // this.sGlobal.getAll();
+    this.listOfData = Array.from({ length: 100 }, (_, i) => ({
+      edit: ``,
+      project: `${i == 2 ? 1 : 2}`,
+      workContent: `Content ${i}`,
+      mainHours: Math.floor(Math.random() * 100),
+      value: Math.random().toFixed(2),
+      action1: `Action ${i}-1`,
+      action2: `Action ${i}-2`,
+    }));
   }
 
   listOfData: any[] = [];
@@ -155,11 +172,17 @@ export class PageDashboard implements OnInit {
       title: 'Edit',
       key: 'edit',
       rowspan: 2,
+      clickable: true,
+      icon: EIcon.Edit,
+      fixLeft: true,
     },
     {
       title: 'Project',
       key: 'project',
       rowspan: 2,
+      clickable: false,
+      fixLeft: true,
+      leftPosition: '100px',
     },
     {
       title: 'WorkContent',

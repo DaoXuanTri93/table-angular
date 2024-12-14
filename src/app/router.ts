@@ -29,6 +29,10 @@ export const router = provideRouter(
               path: 'dashboard',
               loadComponent: () => import('./pages/dashboard/index').then(m => m.PageDashboard),
             },
+            {
+              path: 'codeDemo',
+              loadComponent: () => import('./pages/base/code/code.component').then(m => m.CodeComponent),
+            },
             { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
           ],
         },
