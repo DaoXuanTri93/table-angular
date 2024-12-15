@@ -9,6 +9,7 @@ import type { TemplateRef } from '@angular/core';
  * @template T - The type of the data property in the response object.
  */
 export interface IResponses<T> {
+  [x: string]: any;
   statusCode?: 200 | 201 | 500 | 404;
   message?: string;
   data?: T;

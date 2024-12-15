@@ -6,7 +6,7 @@ import { CButton } from '@/components/button';
 import { CForm } from '@/components/form';
 import { ReusableTableComponent } from '@/components/table/table';
 import { EButtonSize, EFormType, EIcon } from '@/enums';
-import { SGlobal } from '@/services/global';
+import { SProject } from '@/services/projects';
 import { TFunction } from '@/utils/angular';
 import { CommonModule } from '@angular/common';
 import type { Observable } from 'rxjs';
@@ -61,20 +61,19 @@ import type { Observable } from 'rxjs';
           </ng-template>
         </form>
       </div>
-      <div>
-        <app-reusable-table
-          [tableData]="listOfData"
-          [tableColumns]="columnss"
-          [parentHeaderBackground]="'#006241'"
-          [childHeaderBackground]="'#cce0d9'"
-          [scrollX]="'7000px'"
-          [scrollY]="'300px'"
-          (onCellClickEvent)="handleCellClick($event)"
-        ></app-reusable-table>
-      </div>
+      <div
+        app-reusable-table
+        [tableData]="sProject.data | async"
+        [tableColumns]="columnss"
+        [parentHeaderBackground]="'#006241'"
+        [childHeaderBackground]="'#cce0d9'"
+        [scrollX]="'5000px'"
+        [scrollY]="'300px'"
+        (onCellClickEvent)="handleCellClick($event)"
+      ></div>
     </div>
   `,
-  providers: [{ provide: TranslateService, useClass: TFunction }, SGlobal],
+  providers: [{ provide: TranslateService, useClass: TFunction }, SProject],
 })
 export class PageDashboard implements OnInit {
   EButtonSize = EButtonSize;
@@ -82,7 +81,7 @@ export class PageDashboard implements OnInit {
   dataProject: any = {};
   constructor(
     @Inject(TranslateService) readonly t: TFunction,
-    @Inject(SGlobal) readonly sGlobal: SGlobal,
+    @Inject(SProject) readonly sProject: SProject,
   ) {
     console.log('1');
 
@@ -143,10 +142,10 @@ export class PageDashboard implements OnInit {
   }
 
   handleSubmit = ({ value }) => {
-    this.data$ = this.sGlobal.data;
-    this.sGlobal.data.subscribe(item => (this.dataProject = item.data));
-    console.log('dataProject', this.dataProject);
-    console.log('value', value);
+    // this.data$ = this.sGlobal.data;
+    // this.sGlobal.data.subscribe(item => (this.dataProject = item.data));
+    // console.log('dataProject', this.dataProject);
+    // console.log('value', value);
   };
 
   handleSearch = value => {
@@ -155,6 +154,10 @@ export class PageDashboard implements OnInit {
 
   ngOnInit(): void {
     // this.sGlobal.getAll();
+    this.sProject.fetchProjects();
+    console.log('dataPost', this.sProject.data);
+
+    // this.listOfData = dataPost.map(item => item);
     this.listOfData = Array.from({ length: 100 }, (_, i) => ({
       edit: ``,
       project: `${i == 2 ? 1 : 2}`,

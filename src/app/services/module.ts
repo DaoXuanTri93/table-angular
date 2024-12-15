@@ -4,15 +4,15 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { GLOBAL_FEATURE_KEY, globalReducer } from './global';
 import { GlobalEffects } from './global/base';
-import { ProductEffect } from './product/base';
-import { ProjectREducer } from './projects';
+import { PROJECT_FEATURE_KEY, projectReducer } from './projects';
+import { ProjectEffects } from './projects/base';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    StoreModule.forRoot({ [GLOBAL_FEATURE_KEY]: globalReducer, Project: ProjectREducer }),
-    EffectsModule.forRoot([GlobalEffects, ProductEffect]),
+    StoreModule.forRoot({ [GLOBAL_FEATURE_KEY]: globalReducer, [PROJECT_FEATURE_KEY]: projectReducer }),
+    EffectsModule.forRoot([GlobalEffects, ProjectEffects]),
   ],
 })
 export class GlobalStateModule {}

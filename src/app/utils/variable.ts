@@ -168,4 +168,5 @@ export const C_API = {
   Post: '/posts',
   Parameter: '/parameters',
   PostType: '/posts/types',
+  Project: '/posts',
 };
