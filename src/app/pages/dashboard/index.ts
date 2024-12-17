@@ -63,12 +63,11 @@ import type { Observable } from 'rxjs';
       </div>
       <div
         app-reusable-table
-        [tableData]="sProject.data | async"
+        [tableData]="listOfData"
         [tableColumns]="columnss"
         [parentHeaderBackground]="'#006241'"
         [childHeaderBackground]="'#cce0d9'"
-        [scrollX]="'5000px'"
-        [scrollY]="'300px'"
+        [scrollY]="'500px'"
         (onCellClickEvent)="handleCellClick($event)"
       ></div>
     </div>
@@ -145,7 +144,7 @@ export class PageDashboard implements OnInit {
     // this.data$ = this.sGlobal.data;
     // this.sGlobal.data.subscribe(item => (this.dataProject = item.data));
     // console.log('dataProject', this.dataProject);
-    // console.log('value', value);
+    console.log('value', value);
   };
 
   handleSearch = value => {
@@ -205,7 +204,7 @@ export class PageDashboard implements OnInit {
       colspan: 10,
       children: [
         { title: 'Main Hours', key: 'mainHours' },
-        { title: 'Value1', key: 'value1' },
+        { title: '@@@@@@@@@@@@@@@@@@@@@@', key: 'value1' },
         { title: 'Value2', key: 'Value2' },
         { title: 'Value3', key: 'value3' },
         { title: 'Value4', key: 'value4' },
@@ -277,7 +276,87 @@ export class PageDashboard implements OnInit {
         { title: 'Value61', key: 'value61' },
         { title: 'Value71', key: 'value71' },
         { title: 'Value81', key: 'value81' },
-        { title: 'Value91', key: 'value91' },
+        { title: 'Value91Valu', key: 'value91' },
+      ],
+    },
+    {
+      title: 'Requered@@@@',
+      colspan: 10,
+      children: [
+        { title: 'Main Hours', key: 'mainHours' },
+        { title: 'Value11', key: 'value11' },
+        { title: 'Value21', key: 'Value21' },
+        { title: 'Value31', key: 'value31' },
+        { title: 'Value41', key: 'value41' },
+        { title: 'Value51', key: 'value51' },
+        { title: 'Value61', key: 'value61' },
+        { title: 'Value71', key: 'value71' },
+        { title: 'Value81', key: 'value81' },
+        { title: 'Value91Valu', key: 'value91' },
+      ],
+    },
+    {
+      title: 'Requered@@@@',
+      colspan: 10,
+      children: [
+        { title: 'Main Hours', key: 'mainHours' },
+        { title: 'Value11', key: 'value11' },
+        { title: 'Value21', key: 'Value21' },
+        { title: 'Value31', key: 'value31' },
+        { title: 'Value41', key: 'value41' },
+        { title: 'Value51', key: 'value51' },
+        { title: 'Value61', key: 'value61' },
+        { title: 'Value71', key: 'value71' },
+        { title: 'Value81', key: 'value81' },
+        { title: 'Value91Valu', key: 'value91' },
+      ],
+    },
+    {
+      title: 'Requered@@@@',
+      colspan: 10,
+      children: [
+        { title: 'Main Hours', key: 'mainHours' },
+        { title: 'Value11', key: 'value11' },
+        { title: 'Value21', key: 'Value21' },
+        { title: 'Value31', key: 'value31' },
+        { title: 'Value41', key: 'value41' },
+        { title: 'Value51', key: 'value51' },
+        { title: 'Value61', key: 'value61' },
+        { title: 'Value71', key: 'value71' },
+        { title: 'Value81', key: 'value81' },
+        { title: 'Value91Valu', key: 'value91' },
+      ],
+    },
+    {
+      title: 'Requered@@@@',
+      colspan: 10,
+      children: [
+        { title: 'Main Hours', key: 'mainHours' },
+        { title: 'Value11', key: 'value11' },
+        { title: 'Value21', key: 'Value21' },
+        { title: 'Value31', key: 'value31' },
+        { title: 'Value41', key: 'value41' },
+        { title: 'Value51', key: 'value51' },
+        { title: 'Value61', key: 'value61' },
+        { title: 'Value71', key: 'value71' },
+        { title: 'Value81', key: 'value81' },
+        { title: 'Value91Valu', key: 'value91' },
+      ],
+    },
+    {
+      title: 'Requered@@@@',
+      colspan: 10,
+      children: [
+        { title: 'Main Hours', key: 'mainHours' },
+        { title: 'Value11', key: 'value11' },
+        { title: 'Value21', key: 'Value21' },
+        { title: 'Value31', key: 'value31' },
+        { title: 'Value41', key: 'value41' },
+        { title: 'Value51', key: 'value51' },
+        { title: 'Value61', key: 'value61' },
+        { title: 'Value71', key: 'value71' },
+        { title: 'Value81', key: 'value81' },
+        { title: 'Value91Valu', key: 'value91' },
       ],
     },
   ];

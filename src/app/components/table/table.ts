@@ -31,17 +31,20 @@ interface TableColumn {
       [nzShowPagination]="true"
       [nzScroll]="{ x: scrollX, y: scrollY }"
       [nzTableLayout]="'fixed'"
+      [nzNoResult]="undefined"
     >
       <!-- Dynamic Table Header -->
       <thead>
         <tr *ngFor="let headerRow of headerRows">
           <ng-container *ngFor="let col of headerRow">
             <th
+              class="ellipsis-cell"
               [ngClass]="{
                 'parent-header': !col.children,
                 'child-header': col.children,
               }"
-              [nzLeft]="col.fixLeft ? col.leftPosition || '0px' : false"
+              [nz-tooltip]="col.title"
+              [nzLeft]="reusableTable.data.length > 0 && col.fixLeft ? col.leftPosition || '0px' : false"
               [nzAlign]="'center'"
               [style.background-color]="col.children ? childHeaderBackground : parentHeaderBackground"
               [attr.rowspan]="col.rowspan || 1"
@@ -55,12 +58,14 @@ interface TableColumn {
 
       <!-- Dynamic Table Body -->
       <tbody>
-        <tr *ngIf="reusableTable.data.length === 0">
-          <td colspan="50"></td>
-        </tr>
+        <!-- <tr *ngIf="reusableTable.data.length === 0">
+          <td [attr.colspan]="flattenedColumns.length" class="text-center">
+          </td>
+        </tr> -->
         <tr *ngFor="let data of reusableTable.data">
           <ng-container *ngFor="let col of flattenedColumns">
             <td
+              [ngClass]="{ buttonIcon: col.clickable }"
               class="text-body ellipsis-cell"
               *ngIf="col.key"
               [nzLeft]="col.fixLeft ? col.leftPosition || '0px' : false"
@@ -95,9 +100,18 @@ export class ReusableTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.processColumns();
+    this.calculateScrollX();
   }
   onCellClick(data: any, key: string): void {
     this.onCellClickEvent.emit({ data, key });
+  }
+
+  private calculateScrollX(): void {
+    const totalColumnWidth = this.flattenedColumns.length * 150; // Assume each column is 150px wide
+    const tableContainerWidth = document.querySelector('nz-table')?.clientWidth || 0;
+
+    // If total column width exceeds the table container width, set scrollX dynamically
+    this.scrollX = totalColumnWidth > tableContainerWidth ? `${totalColumnWidth}px` : 'auto';
   }
   /**
    * Process column configurations to support nested headers.
